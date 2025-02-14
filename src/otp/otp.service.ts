@@ -18,4 +18,17 @@ export class OtpService {
 
     return this.smsProvider.sendSms(phoneNumber, message);
   }
+
+    async verifyOtp(phoneNumber: string, otp: string): Promise<boolean> {
+        const storedOtp = this.otpStore.getOtp(phoneNumber);
+        if (!storedOtp) {
+            return false;
+        } else if (storedOtp.otp !== otp) {
+            return false;
+        } else if (Date.now() > storedOtp.expiresAt) {
+            this.otpStore.clearOtp(phoneNumber);
+            return false;
+        }
+        return true;
+    }
 }

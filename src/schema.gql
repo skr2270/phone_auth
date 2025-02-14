@@ -1,0 +1,19 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type SendOtpResponse {
+  success: Boolean!
+}
+
+type Query {
+  dummyQuery: String!
+}
+
+type Mutation {
+  sendOtp(input: SendOtpInput!): SendOtpResponse!
+}
+
+input SendOtpInput {
+  phoneNumber: String!
+}
