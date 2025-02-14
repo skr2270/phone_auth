@@ -4,10 +4,10 @@ import { OtpStore } from './otp.store';
 
 @Injectable()
 export class OtpService {
-    private otpStore = new OtpStore();
+  private otpStore = new OtpStore();
   constructor(
     @Inject('SmsProvider') private readonly smsProvider: SmsProvider,
-  ) {}
+  ) { }
 
   async sendOtp(phoneNumber: string): Promise<boolean> {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -19,16 +19,14 @@ export class OtpService {
     return this.smsProvider.sendSms(phoneNumber, message);
   }
 
-    async verifyOtp(phoneNumber: string, otp: string): Promise<boolean> {
-        const storedOtp = this.otpStore.getOtp(phoneNumber);
-        if (!storedOtp) {
-            return false;
-        } else if (storedOtp.otp !== otp) {
-            return false;
-        } else if (Date.now() > storedOtp.expiresAt) {
-            this.otpStore.clearOtp(phoneNumber);
-            return false;
-        }
-        return true;
+  async verifyOtp(phoneNumber: string, otp: string): Promise<boolean> {
+    const storedOtp = this.otpStore.getOtp(phoneNumber);
+    if (storedOtp && storedOtp.otp === otp && Date.now() <= storedOtp.expiresAt) {
+      this.otpStore.clearOtp(phoneNumber);
+      return true;
     }
+    else {
+      return false;
+    }
+  }
 }

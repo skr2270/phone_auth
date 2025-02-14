@@ -6,14 +6,24 @@ type SendOtpResponse {
   success: Boolean!
 }
 
+type VerifyOtpResponse {
+  verified: Boolean!
+}
+
 type Query {
   dummyQuery: String!
 }
 
 type Mutation {
   sendOtp(input: SendOtpInput!): SendOtpResponse!
+  verifyOtp(input: VerifyOtpInput!): VerifyOtpResponse!
 }
 
 input SendOtpInput {
   phoneNumber: String!
+}
+
+input VerifyOtpInput {
+  phoneNumber: String!
+  otp: String!
 }
